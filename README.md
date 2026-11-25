@@ -6,6 +6,25 @@ A small, native Mac app for signing PDFs with the certificate in your macOS Keyc
 checking who signed a PDF and whether it changed afterwards. It's built for the common
 case where a few people sign the same document in turn and pass it on by email.
 
+<p align="center">
+  <img src="docs/screenshot.png" width="900" alt="RockSign with three contracts open: on the left the list of PDFs to sign, in the middle an NDA with one valid signature and a box waiting for the next one, on the right the panel for signing with a certificate from the Keychain">
+  <br><sub>Shown with made-up documents and certificates (<code>rocksign --demo</code>).</sub>
+</p>
+
+> **Everything stays on your Mac.** RockSign only makes signing simpler. It adds no service in
+> between.
+>
+> - **It uses the certificates already in your Keychain.** You import nothing into RockSign.
+>   Your private key never leaves the Keychain: macOS does the signing, after asking you.
+> - **Your documents stay where they are.** RockSign reads the PDF you open and writes the
+>   signed copy where you choose. It doesn't upload, collect or keep anything about your
+>   documents.
+> - **There's no account, cloud, tracking or update check.** The only network request is the
+>   optional trusted timestamp. It sends a fingerprint (hash) of the signature, not the document,
+>   to DigiCert's free timestamp service. Turn it off in Settings and RockSign never goes online.
+> - **It only remembers your preferences,** such as the file-name text, which certificates to
+>   show and the stamp logo. They're kept in `~/Library/Application Support/RockSign`.
+
 - Opens several PDFs at once. The list on the left ticks off the ones you've signed.
 - Shows every signature, and warns in amber or red if a document was edited after it was signed.
 - Signs with your Keychain certificate (PAdES, with a trusted timestamp), with a visible stamp
@@ -13,7 +32,6 @@ case where a few people sign the same document in turn and pass it on by email.
 - Saves a signed **copy**. The original stays untouched, and earlier signatures stay valid.
 - Written in Rust with [GPUI](https://gpui.rs). Pages are drawn by Apple's PDFKit, with no
   browser engine inside.
-- Works offline, apart from the optional timestamp. No account, no tracking.
 
 Requires macOS 12 or newer, on Apple Silicon or Intel.
 
@@ -138,6 +156,7 @@ cargo run -- --list-certs                         # certificates RockSign can si
 cargo run -- --check "Contract (signed 1).pdf"    # signatures and their trust
 cargo run -p rocksign-core --example inspect -- "Contract (signed 1).pdf"
 cargo run -p rocksign-core --example update_cz_trusted_list   # refresh the Czech CAs
+cargo run --release -- --demo <folder>      # made-up PDFs and certificates, for screenshots (src/demo.rs)
 ```
 
 **Layout.**

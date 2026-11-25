@@ -12,7 +12,8 @@ use security_framework::key::Algorithm;
 #[derive(Clone)]
 pub struct Identity {
     pub cert: Certificate,
-    pub identity: SecIdentity,
+    /// The Keychain item holding the private key; none for demo certificates.
+    pub identity: Option<SecIdentity>,
 }
 
 impl Identity {
@@ -34,7 +35,7 @@ pub fn identities() -> Result<Vec<Identity>> {
         let Ok(cert) = identity.certificate() else { continue };
         let Ok(cert) = Certificate::parse(&cert.to_der()) else { continue };
         if !out.iter().any(|i| i.cert.der == cert.der) {
-            out.push(Identity { cert, identity });
+            out.push(Identity { cert, identity: Some(identity) });
         }
     }
     // Usable first; for the same person, the certificate that lasts longest first.

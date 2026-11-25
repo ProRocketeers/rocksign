@@ -46,7 +46,11 @@ fn main() -> Result<()> {
         location: None,
         time: now,
         stamp: Some(Stamp {
-            text: StampText { name: name.clone(), date: now.format("%Y-%m-%d %H:%M:%S %:z").to_string(), reason: reason.clone() },
+            text: StampText {
+                name: name.clone(),
+                date: now.format("%-d %b %Y, %H:%M %:z").to_string(), /* same as the app */
+                reason: reason.clone(),
+            },
             regular: FontData { data: &font, index: 0 },
             bold: Some(FontData { data: &bold, index: 0 }),
             logo: logo.as_ref(),

@@ -55,7 +55,7 @@ pub fn check_trust(report: &Report, anchors: &[Certificate]) -> Vec<TrustOutcome
 pub struct SignJob {
     pub input: Arc<Vec<u8>>,
     pub output: PathBuf,
-    pub identity: SecIdentity,
+    pub identity: Option<SecIdentity>,
     pub cert: Certificate,
     /// One signature per target, applied in order and saved as one file.
     pub targets: Vec<Target>,
@@ -104,7 +104,8 @@ fn sign_once(job: &SignJob, target: Target, input: &[u8]) -> Result<Vec<u8>> {
     };
     let prepared = sign::prepare(input, &req)?;
     let attrs = cms::signed_attributes(&prepared.digest, &job.cert);
-    let signature = keychain::sign(&job.identity, kind, &attrs)?;
+    let key = job.identity.as_ref().context("This is a demo certificate; it can't sign.")?;
+    let signature = keychain::sign(key, kind, &attrs)?;
     let token = if job.timestamp {
         Some(fetch_timestamp(&tsa_url(), &signature).context("Could not get a timestamp. Check your connection, or sign without a timestamp")?)
     } else {

@@ -316,7 +316,8 @@ impl RockSignView {
         .detach();
         cx.observe_window_appearance(window, |_, _, cx| cx.notify()).detach();
 
-        let settings = Settings::load();
+        // The demo uses default settings and never saves them.
+        let settings = if crate::demo::active() { Settings { setup_done: true, ..Settings::default() } } else { Settings::load() };
         let suffix_input = cx.new(|cx| {
             let mut input = TextInput::new(settings::DEFAULT_SUFFIX, cx);
             input.set_text(&settings.file_suffix, cx);
@@ -370,7 +371,7 @@ impl RockSignView {
             next_toast: 0,
             expanded: HashSet::new(),
             hovered_sig: None,
-            anchors: trust::load_anchors(),
+            anchors: if crate::demo::active() { crate::demo::anchors() } else { trust::load_anchors() },
             settings,
             draft: None,
             suffix_input,
@@ -439,6 +440,9 @@ impl RockSignView {
         };
         if self.current == Some(i) {
             self.show_current();
+            if self.doc.is_some() && crate::demo::take_scene() {
+                self.start_signing(cx);
+            }
         }
         cx.notify();
     }
@@ -613,6 +617,9 @@ impl RockSignView {
     // --- settings and logo -------------------------------------------------------
 
     fn save_settings(&mut self, cx: &mut Context<Self>) {
+        if crate::demo::active() {
+            return;
+        }
         if let Err(e) = self.settings.save() {
             self.show_toast(Level::Bad, format!("Could not save settings: {e:#}"), cx);
         }
@@ -636,7 +643,10 @@ impl RockSignView {
 
     fn load_identities(&mut self, cx: &mut Context<Self>) {
         cx.spawn(async move |this, cx| {
-            let result = cx.background_executor().spawn(async move { keychain::identities() }).await;
+            let result = cx
+                .background_executor()
+                .spawn(async move { if crate::demo::active() { crate::demo::identities() } else { keychain::identities() } })
+                .await;
             this.update(cx, |this, cx| {
                 this.identities = Some(result.map_err(|e| format!("{e:#}")));
                 let default = this.default_identity();

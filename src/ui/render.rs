@@ -570,9 +570,9 @@ impl RockSignView {
         let zoom = format!("{}%", (self.zoom * 100.0).round());
         let hint = match &self.sign {
             Some(m) if m.busy => "Signing…",
-            Some(m) if m.places.is_empty() => "Drag a box on the page for your stamp, or click for a standard size",
+            Some(m) if m.places.is_empty() => "Click or drag to place your stamp",
             Some(m) if m.places == [Placed::Invisible] => "No visible stamp",
-            Some(_) => "Click another page to add a stamp there · drag again to move one",
+            Some(_) => "Click another page to add a stamp",
             None => "",
         };
         div()
@@ -600,17 +600,14 @@ impl RockSignView {
                     }))),
             )
             .child(
+                // Centered while it fits, cut with "…" when the window is narrow.
                 div()
                     .flex_1()
                     .min_w_0()
-                    .flex()
-                    .justify_center()
+                    .overflow_hidden()
                     .text_size(px(12.0))
                     .text_color(theme.accent)
-                    .overflow_hidden()
-                    .whitespace_nowrap()
-                    .text_ellipsis()
-                    .child(hint),
+                    .child(div().w_full().text_center().truncate().child(hint)),
             )
             .child(
                 div()

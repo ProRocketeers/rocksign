@@ -40,6 +40,9 @@ pub fn evaluate(signer: &Certificate, others: &[Certificate], at: Option<DateTim
             }
         }
         let mut trust = SecTrust::create_with_certificates(&certs, &[SecPolicy::create_x509()]).map_err(|e| e.to_string())?;
+        // Offline: no downloading of missing intermediates or revocation data. The timestamp is
+        // RockSign's only network use.
+        trust.set_network_fetch_allowed(false).map_err(|e| e.to_string())?;
         if let Some(t) = at {
             // CFAbsoluteTime counts seconds from 2001-01-01.
             let abs = t.timestamp() as f64 - 978_307_200.0;

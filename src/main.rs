@@ -1,4 +1,5 @@
 mod actions;
+mod demo;
 mod jobs;
 mod keychain;
 mod render;
@@ -125,7 +126,14 @@ fn main() -> anyhow::Result<()> {
         }
         return Ok(());
     }
-    let initial: Vec<PathBuf> = args.iter().skip(1).map(PathBuf::from).filter(|p| p.exists()).collect();
+    let initial: Vec<PathBuf> = if args.get(1).map(String::as_str) == Some("--demo") {
+        // Made-up documents and certificates for screenshots; see src/demo.rs.
+        let dir = args.get(2).map(PathBuf::from).ok_or_else(|| anyhow::anyhow!("usage: rocksign --demo <folder>"))?;
+        demo::start(dir);
+        demo::files()
+    } else {
+        args.iter().skip(1).map(PathBuf::from).filter(|p| p.exists()).collect()
+    };
 
     let app = Application::new();
     // Files opened from Finder ("Open With", double-click, drop on the Dock icon) arrive as

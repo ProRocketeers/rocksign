@@ -1,0 +1,27 @@
+[package]
+name = "rocksign-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "PDF signature validation and PAdES signing, with no platform code (the backend can reuse it)"
+
+[dependencies]
+anyhow = "1.0"
+chrono = "0.4"
+flate2 = "1.1"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+lopdf = { version = "0.47", default-features = false }
+p256 = { version = "0.13", features = ["ecdsa"] }
+p384 = { version = "0.13", features = ["ecdsa"] }
+resvg = { version = "0.50", default-features = false }
+rsa = { version = "0.9", features = ["sha2"] }
+sha1 = { version = "0.10", features = ["oid"] }
+sha2 = { version = "0.10", features = ["oid"] }
+ttf-parser = "0.25"
+
+[dev-dependencies]
+p256 = { version = "0.13", features = ["ecdsa", "pkcs8", "pem"] }
+roxmltree = "0.21"
+rsa = { version = "0.9", features = ["sha2", "pem"] }
+ureq = "3.5"

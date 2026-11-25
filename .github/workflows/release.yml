@@ -1,0 +1,52 @@
+name: Release
+
+# Push a tag like v0.2.0 (matching the version in Cargo.toml) to publish a release.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write      # create the GitHub release
+  id-token: write      # sign the build attestation
+  attestations: write  # store it
+
+jobs:
+  release:
+    name: Build and publish
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Check the tag matches Cargo.toml
+        run: |
+          version=$(scripts/version.sh)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag is $GITHUB_REF_NAME but Cargo.toml says $version"
+            exit 1
+          fi
+
+      - name: Install Rust for Apple Silicon and Intel
+        run: |
+          rustup toolchain install
+          rustup target add aarch64-apple-darwin x86_64-apple-darwin
+
+      - name: Tests
+        run: cargo test --workspace --locked
+
+      - name: Build the universal app
+        run: scripts/bundle.sh --universal
+
+      - name: Attest that GitHub built it from this commit
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: dist/RockSign-*.dmg
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sed "s|OWNER/REPO|$GITHUB_REPOSITORY|g" packaging/release-notes.md > "$RUNNER_TEMP/notes.md"
+          gh release create "$GITHUB_REF_NAME" dist/RockSign-*.dmg dist/RockSign-*.dmg.sha256 \
+            --title "RockSign ${GITHUB_REF_NAME#v}" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
+            --generate-notes

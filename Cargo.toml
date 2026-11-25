@@ -1,0 +1,32 @@
+[workspace]
+members = ["crates/rocksign-core"]
+resolver = "3"
+
+[package]
+name = "rocksign"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "Sign PDFs with certificates from the macOS Keychain and check signatures"
+
+[dependencies]
+rocksign-core = { path = "crates/rocksign-core" }
+anyhow = "1.0"
+chrono = "0.4"
+core-foundation = "0.10"
+dirs = "7.0"
+futures = "0.3"
+gpui = { version = "0.2.2", features = ["runtime_shaders"] }
+image = { version = "0.25", default-features = false, features = ["png"] }
+objc2 = "0.6"
+objc2-core-foundation = "0.3"
+objc2-core-graphics = { version = "0.3", features = ["CGBitmapContext", "CGColorSpace", "CGContext", "CGImage"] }
+objc2-foundation = { version = "0.3", features = ["NSData"] }
+objc2-pdf-kit = { version = "0.3", features = ["PDFDocument", "PDFPage", "objc2-core-graphics"] }
+security-framework = { version = "3.7", features = ["macos-12"] }
+serde = { version = "1.0", features = ["derive"] }
+smallvec = "1"
+toml = "1.2"
+unicode-segmentation = "1.13"
+ureq = "3.5"

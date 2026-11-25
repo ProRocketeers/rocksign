@@ -1,0 +1,30 @@
+use gpui::actions;
+
+actions!(
+    rocksign,
+    [
+        OpenFile,
+        StartSigning,
+        ZoomIn,
+        ZoomOut,
+        ZoomFit,
+        PageDown,
+        PageUp,
+        LineDown,
+        LineUp,
+        FirstPage,
+        LastPage,
+        NextPage,
+        PrevPage,
+        NextFile,
+        PrevFile,
+        RemoveFile,
+        ClearSignedFiles,
+        ClearAllFiles,
+        ToggleSettings,
+        ShowWelcome,
+        Escape,
+        CloseWindow,
+        Quit,
+    ]
+);

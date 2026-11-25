@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- RockSign app icon. Rebuild AppIcon.icns with scripts/make-icon.sh after editing. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#26305E"/>
+      <stop offset="1" stop-color="#141A38"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)" filter="url(#shadow)"/>
+  <rect x="100.5" y="100.5" width="823" height="823" rx="184.5" fill="none" stroke="#0E1330" stroke-width="1"/>
+  <g transform="translate(512 512) scale(5.9) translate(-56 -52)">
+  <path d="M53,53 C44,63 31,72 26,66 C22,60 32,57 32,66 C32,76 18,84 4,90" fill="none" stroke="#FFFFFF" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(72 34) rotate(45)">
+    <path d="M-11,-2 C-19,2 -24,10 -23,20 L-11,13 Z" fill="#2A47B8"/>
+    <path d="M11,-2 C19,2 24,10 23,20 L11,13 Z" fill="#2A47B8"/>
+    <path d="M0,-36 C12,-26 15,-8 12,12 L-12,12 C-15,-8 -12,-26 0,-36 Z" fill="#3D63DD"/>
+    <path d="M0,-36 C12,-26 15,-8 12,12 L0,12 Z" fill="#000000" fill-opacity="0.12"/>
+    <path d="M-7,12 L7,12 L5,17 L-5,17 Z" fill="#2A47B8"/>
+    <path d="M-5,17 Q0,34 5,17 Z" fill="#F5A524"/>
+    <path d="M-2.5,17 Q0,26 2.5,17 Z" fill="#FFD27A"/>
+    <circle cx="0" cy="-11" r="6.5" fill="#FFFFFF" stroke="#A9BCFB" stroke-width="2.5"/>
+  </g>
+  </g>
+</svg>
